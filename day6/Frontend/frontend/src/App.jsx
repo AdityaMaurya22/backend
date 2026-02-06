@@ -1,33 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import '/src/app.css'
+import { useState, useEffect, use } from 'react'
+import '/src/App.css'
 import axios from 'axios'
 
 function App() {
 
-  let [notes, setNotes]= useState([{
-    title: "Test Note 1",
-    description: "This is the description for test note 1"
-  },
-  {
-    title: "Test Note 2",
-    description: "This is the description for test note 2"
-  },
-  {
-    title: "Test Note 3",
-    description: "This is the description for test note 3"
-  }, {
-    title: "Test Note 4",
-    description: "This is the description for test note 4"
-  }])
+  let [notes, setNotes] = useState([])
 
-  axios.get('http://localhost:3000/notes')
-  .then((res)=>{
-    setNotes(res.data.notes)
-  })
+  function dbcall() {
+    axios.get('http://localhost:3000/notes')
+      .then((res) => {
+        setNotes(res.data.notes)
+      })
+  }
+
+  function formHandler(e) {
+    e.preventDefault()
+
+    const {title, description} = e.target.elements
+    console.log(title.value, description.value)
+
+    axios.post('http://localhost:3000/notes',{
+      title: title.value,
+      description: description.value
+    })
+    .then(res=>{
+      console.log(res.data);
+
+      dbcall()
+    })
+  }
+
+  function deleteNote(noteid){
+    axios.delete(`http://localhost:3000/notes/${noteid}`)
+    .then(res=>{
+      console.log(res.data);
+      dbcall()
+    })
+  }
+
+  useEffect(() => {
+    dbcall()
+  }, [])
+
 
   return (
     <>
+
+      <form className="note-create-form" onSubmit={formHandler}>
+        <input type="text" placeholder='Enter Title' name='title'/>
+        <input type="text" placeholder='Enter Description' name="description" />
+        <button>Submit</button>
+      </form>
       <div className="notes">
         {
           notes.map((n) => {
@@ -35,6 +58,7 @@ function App() {
               <div className="note">
                 <h1>{n.title}</h1>
                 <p>{n.description}</p>
+                <button onClick={()=>{deleteNote(n._id)}}>Delete</button>
               </div>
             )
           })

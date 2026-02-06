@@ -6,6 +6,7 @@ const cors = require('cors')
 app.use(cors())
 
 app.use(express.json())
+app.use(express.static('public'))
 
 app.get('/notes', async (req, res)=>{
     const notes = await noteModel.find()
@@ -46,6 +47,12 @@ app.patch('/notes/:id',async (req, res)=>{
     res.status(200).json({
         message: "Note updated successfully"
     })
+})
+
+console.log(__dirname)
+
+app.use("*name", (req, res)=>{
+    res.sendFile(path.join(__dirname, "..", "/public/index.html"))
 })
 
 module.exports = app

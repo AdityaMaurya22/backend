@@ -11,3 +11,10 @@
     padding: 1.5rem;
     border-radius: 1rem;
 }
+
+.note-create-form{
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+}
+
