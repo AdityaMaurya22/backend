@@ -8,7 +8,7 @@ const App = () => {
   const [data, setData] = useState([])
 
   function dbCall() {
-    axios.get('http://localhost:3000/api/data')
+    axios.get('https://day7-le5s.onrender.com/api/data')
       .then((res) => {
         setData(res.data.data)
       })
@@ -20,7 +20,7 @@ const App = () => {
     const { title, description } = e.target.elements
     console.log(title.value, description.value)
 
-    axios.post('http://localhost:3000/api/data', {
+    axios.post('https://day7-le5s.onrender.com/api/data', {
       title: title.value,
       description: description.value
     })
@@ -31,7 +31,7 @@ const App = () => {
   }
 
   function deleteData(dataid){
-    axios.delete(`http://localhost:3000/api/data/${dataid}`)
+    axios.delete(`https://day7-le5s.onrender.com/api/data/${dataid}`)
     .then(res=>{
       console.log(res.data);
       dbCall()
